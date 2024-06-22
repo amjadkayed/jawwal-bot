@@ -1,16 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import VoiceButton from "./VoiceButton";
 import { useAppContext } from "../../context/AppContext";
 
-export const ChatInput: React.FC = () => {
+export const ChatInput = ({
+  addMessage,
+}: {
+  addMessage: (messgae: string, isUser: boolean) => void;
+}) => {
   const [message, setMessage] = useState("");
   const { theme } = useAppContext();
 
   const handleSendMessage = () => {
-    console.log("Send message:", message);
+    if (!message) return;
     setMessage("");
+    addMessage(message, true);
   };
 
   const inputVariants = {

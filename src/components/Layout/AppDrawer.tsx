@@ -4,14 +4,17 @@ import { motion } from "framer-motion";
 const items = [
   { name: "newChat", link: "" },
   { name: "support", link: "https://jawwalbot.jawwal.ps/Jawwalwebchat" },
-  { name: "location", link: "" },
+  {
+    name: "location",
+    link: "https://www.jawwal.ps/en/individuals/support/showrooms-dealers",
+  },
 ];
 
 export default function AppDrawer() {
   return (
     <Box
       sx={{
-        backgroundColor: "#5a9252",
+        backgroundColor: "#6abf4b",
         width: "100%",
         maxWidth: "300px",
         overflowY: "auto",
@@ -59,6 +62,14 @@ export default function AppDrawer() {
             justifyContent="start"
             alignItems="center"
             sx={{ cursor: "pointer" }}
+            onClick={() => {
+              if (item.link) {
+                window.open(item.link, "_blank");
+              } else {
+                localStorage.clear("access_token");
+                window.location.reload();
+              }
+            }}
           >
             {item.name.charAt(0).toUpperCase() +
               item.name

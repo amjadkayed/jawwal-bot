@@ -1,51 +1,112 @@
-import React, { useState, useEffect } from "react";
-import { Box } from "@mui/material";
+import { useRef, useEffect, useState } from "react";
+import { Box, Link } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
+import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
+import useWindowSize from "../../hooks/useWindowWidth";
 
-interface Message {
-  id: number;
+// Assuming the Message type now also has an optional links field
+export type Message = {
+  id: string;
   text: string;
-  sender: string;
-}
+  is_user: boolean;
+  links?: { url: string; text: string }[]; // Array of objects for links
+};
 
-export const ChatBox: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+export const ChatBox = ({
+  messages,
+  Loading,
+}: {
+  messages: Message[];
+  Loading: boolean;
+}) => {
+  console.log(messages);
+  const width = useWindowSize();
+  const [localMessages, setLocalMessages] = useState<Message[]>([]);
 
-  // useEffect(() => {
-  //   // Simulate receiving new messages
-  //   const interval = setInterval(() => {
-  //     setMessages((prevMessages) => [
-  //       ...prevMessages,
-  //       { id: prevMessages.length + 1, text: "New message!", sender: "user" },
-  //     ]);
-  //   }, 5000);
-  //   return () => clearInterval(interval);
-  // }, []);
+  useEffect(() => {
+    // Initialize with a welcome message
+    const welcomeMessage = {
+      id: "welcome-msg",
+      text: "Welcome to our chat service! How can I assist you today?",
+      is_user: false,
+      links: [{ url: "https://example.com", text: "Learn More" }], // Example link
+    };
+    setLocalMessages([welcomeMessage, ...messages]);
+  }, [messages]);
 
   return (
-    <Box sx={{ flex: 1, overflowY: "auto", p: 2 }}>
-      <AnimatePresence>
-        {messages.map((message) => (
-          <motion.div
-            key={message.id}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, x: -100 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Box
-              sx={{
-                margin: "10px",
-                padding: "10px",
-                borderRadius: "10px",
-                backgroundColor: "#f0f0f0",
+    <Box
+      sx={{
+        width: width < 700 ? "100%" : "calc(100% - 160px)",
+        height: "100%",
+        overflowY: "auto",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+        "-ms-overflow-style": "none",
+        "scrollbar-width": "none",
+        position: "relative",
+        display: "flex",
+        flexDirection: "column-reverse",
+      }}
+    >
+      <OverlayScrollbarsComponent
+        options={{
+          scrollbars: {
+            autoHide: "scroll",
+            autoHideDelay: 500,
+          },
+        }}
+      >
+        <AnimatePresence>
+          {localMessages?.map((message) => (
+            <motion.div
+              key={message?.id}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }} // Modified to move up when disappearing
+              transition={{ duration: 0.5 }}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: message.is_user ? "end" : "start",
               }}
             >
-              {message.text}
-            </Box>
-          </motion.div>
-        ))}
-      </AnimatePresence>
+              {!message.is_user && (
+                <img
+                  src="/public/images/logo.png"
+                  alt=""
+                  height={width > 700 ? 50 : 30}
+                  width={width > 700 ? 50 : 30}
+                />
+              )}
+              <Box
+                sx={{
+                  margin: "10px",
+                  width: "fit-content",
+                  padding: "10px",
+                  borderRadius: "10px",
+                  backgroundColor: "#E5E5E5",
+                  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                  color: "#000",
+                }}
+              >
+                {message.text}
+                {!!message?.link && (
+                  <Link
+                    href={message?.link}
+                    target="_blank"
+                    style={{ margin: "5px" }}
+                  >
+                    For more info, click me !
+                  </Link>
+                )}
+              </Box>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </OverlayScrollbarsComponent>
     </Box>
   );
 };

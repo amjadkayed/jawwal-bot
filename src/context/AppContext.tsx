@@ -9,7 +9,12 @@ import React, {
 import { ThemeProvider, createTheme, Theme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useMediaQuery } from "@mui/material";
-
+export interface Message {
+  id: number;
+  text: string;
+  is_user: boolean;
+  link?: string;
+}
 interface AppContextProps {
   currentChatId: string | undefined;
   setCurrentChatId: React.Dispatch<React.SetStateAction<string | undefined>>;
@@ -18,6 +23,8 @@ interface AppContextProps {
   setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   toggleTheme: () => void;
   isDarkMode: boolean;
+  messages?: Message[];
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
 }
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
@@ -32,6 +39,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   );
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [isLightMode, setIsLightMode] = useState<boolean>(prefersDarkMode);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -74,6 +82,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         isDrawerOpen,
         setIsDrawerOpen,
         toggleTheme,
+        setMessages,
+        messages,
         isDarkMode: !isLightMode,
       }}
     >

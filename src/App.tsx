@@ -7,6 +7,7 @@ import "overlayscrollbars/overlayscrollbars.css";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppProvider } from "./context/AppContext";
+import AuthWrapper from "./components/AuthWrapper";
 
 function App() {
   const [initBodyOverlayScrollbars] = useOverlayScrollbars({
@@ -26,15 +27,17 @@ function App() {
   }, [initBodyOverlayScrollbars]);
 
   return (
-    <BrowserRouter>
-      <AppProvider>
-        <DndProvider backend={HTML5Backend}>
-          <MainLayout>
-            <AppRoutes />
-          </MainLayout>
-        </DndProvider>
-      </AppProvider>
-    </BrowserRouter>
+    <AppProvider>
+      <AuthWrapper>
+        <BrowserRouter>
+          <DndProvider backend={HTML5Backend}>
+            <MainLayout>
+              <AppRoutes />
+            </MainLayout>
+          </DndProvider>
+        </BrowserRouter>
+      </AuthWrapper>
+    </AppProvider>
   );
 }
 
