@@ -1,11 +1,28 @@
-:root {
+#root {
   --navbar-height: 50px;
   --footer-height: 90px;
   --x-padding: 50px;
-  --root-background-color: #020317;
-  background-color: var(--root-background-color);
+  --root-background-color: #f5f5f5;
+  position: relative;
   margin: 0;
   padding: 0;
+  overflow: hidden;
+  max-height: 100vh; /* Removed quotes around 100vh */
+}
+
+#root::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: var(--background-image); /* Use CSS variable */
+  background-repeat: repeat;
+  z-index: -1;
+  opacity: 0.3;
+  overflow: hidden;
+  max-height: 100vh;
 }
 
 html,
@@ -14,11 +31,10 @@ body {
   padding: 0;
   display: flex;
   flex-direction: column;
-  font-family: "Crush-Bubble", sans-serif;
-  color: black; /* Default text color, adjust as needed */
-  background-color: var(
-    --root-background-color
-  ); /* Applying the root background color */
+  font-family: "neosans", sans-serif;
+  color: black;
+  overflow: hidden;
+  max-height: "100vh";
 }
 
 a {
@@ -32,4 +48,88 @@ a {
   min-height: 100vh;
   flex: 1;
   box-sizing: border-box;
+}
+
+@font-face {
+  font-family: "neosans";
+  src: url("/fonts/Neo Sans Std Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "neosans";
+  src: url("/fonts/Neo Sans Std Black Italic.otf") format("opentype");
+  font-weight: 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "neosans";
+  src: url("/fonts/Neo Sans Std Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "neosans";
+  src: url("/fonts/Neo Sans Std Bold Italic.otf") format("opentype");
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "neosans";
+  src: url("/fonts/Neo Sans Std Italic.otf") format("opentype");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "neosans";
+  src: url("/fonts/Neo Sans Std Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "neosans";
+  src: url("/fonts/Neo Sans Std Light Italic.otf") format("opentype");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "neosans";
+  src: url("/fonts/Neo Sans Std Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "neosans";
+  src: url("/fonts/Neo Sans Std Medium Italic.otf") format("opentype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "neosans";
+  src: url("/fonts/Neo Sans Std Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "neosans";
+  src: url("/fonts/Neo Sans Std Ultra.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "neosans";
+  src: url("/fonts/Neo Sans Std Ultra Italic.otf") format("opentype");
+  font-weight: 800;
+  font-style: italic;
 }

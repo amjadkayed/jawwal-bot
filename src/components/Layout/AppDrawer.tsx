@@ -1,108 +1,72 @@
 import { Box } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import SettingsIcon from "@mui/icons-material/Settings";
+import { motion } from "framer-motion";
 
-const chats = [
-  {
-    name: "Weather Bot",
-    desc: "Provides real-time weather updates and forecasts.",
-  },
-  { name: "News Bot", desc: "Delivers the latest news from around the world." },
-  {
-    name: "Fitness Bot",
-    desc: "Guides you through daily workouts and tracks your progress.",
-  },
-  {
-    name: "Finance Bot",
-    desc: "Helps you manage your expenses and investments.",
-  },
-  {
-    name: "Travel Bot",
-    desc: "Assists with travel planning, bookings, and local suggestions.",
-  },
-  {
-    name: "Food Bot",
-    desc: "Finds recipes based on your dietary preferences and what’s in your fridge.",
-  },
-  {
-    name: "Shopping Bot",
-    desc: "Helps you find the best deals and tracks your orders.",
-  },
-  {
-    name: "Study Bot",
-    desc: "Aids in organizing study schedules and provides learning resources.",
-  },
-  { name: "Music Bot", desc: "Recommends music based on your taste and mood." },
-  {
-    name: "Reminder Bot",
-    desc: "Keeps track of your tasks and reminds you of important dates.",
-  },
+const items = [
+  { name: "newChat", link: "" },
+  { name: "support", link: "https://jawwalbot.jawwal.ps/Jawwalwebchat" },
+  { name: "location", link: "" },
 ];
 
 export default function AppDrawer() {
   return (
     <Box
-      style={{
-        backgroundColor: "black",
-        minHeight: "100%",
-        width: "240px",
-        maxWidth: "240px",
-        boxShadow: "4px 0 10px rgba(181, 214, 46, 0.2)",
+      sx={{
+        backgroundColor: "#5a9252",
+        width: "100%",
+        maxWidth: "300px",
         overflowY: "auto",
+        borderRadius: "0px 20px 20px 0px",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        paddingY: "20px",
+        paddingLeft: "10px",
+        gap: "30px",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          height: "70px",
-          borderBottom: "2px solid rgba(255,255,255,0.2)",
-          width: "100%",
-          padding: "0 20px",
-          boxSizing: "border-box",
-        }}
-      >
-        <MenuIcon sx={{ color: "white" }} />
-        <SettingsIcon sx={{ color: "white" }} />
-      </Box>
-
-      {chats.map((item, index) => (
-        <Box
+      {items.map((item, index) => (
+        <motion.div
           key={index}
-          sx={{
+          initial={{
+            borderBottomWidth: 0,
+            borderBottomColor: "transparent",
+            width: "0%",
+          }}
+          whileHover={{
+            borderBottomWidth: "4px",
+            borderBottomColor: "#ffffff",
+            width: "100%",
+            transition: { duration: 0.3 },
+          }}
+          style={{
+            height: "50px",
             display: "flex",
-            flexDirection: "column",
-            padding: "10px",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-            "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 0.1)",
-            },
-            cursor: "pointer",
+            gap: "20px",
+            borderBottom: "2px solid transparent",
           }}
         >
+          <img
+            src={`/public/images/${item.name}.png`}
+            alt=""
+            height={50}
+            width={50}
+          />
           <Box
-            sx={{
-              fontWeight: "bold",
-              color: "white",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
+            minWidth="200px"
+            color="#fff"
+            height="100%"
+            display="flex"
+            justifyContent="start"
+            alignItems="center"
+            sx={{ cursor: "pointer" }}
           >
-            {item.name}
+            {item.name.charAt(0).toUpperCase() +
+              item.name
+                .slice(1)
+                .replace("newChat", "New Chat")
+                .replace("location", "Our Locations")}
           </Box>
-          <Box
-            sx={{
-              color: "gray",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {item.desc}
-          </Box>
-        </Box>
+        </motion.div>
       ))}
     </Box>
   );

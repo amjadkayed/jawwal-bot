@@ -2,17 +2,22 @@ import React, {
   createContext,
   useContext,
   useState,
-  ReactNode,
   useMemo,
+  ReactNode,
+  useEffect,
 } from "react";
 import { ThemeProvider, createTheme, Theme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { useMediaQuery } from "@mui/material";
 
 interface AppContextProps {
   currentChatId: string | undefined;
   setCurrentChatId: React.Dispatch<React.SetStateAction<string | undefined>>;
   theme: Theme;
-  updateTheme: (primaryColor: string, secondaryColor: string) => void;
+  isDrawerOpen: boolean;
+  setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleTheme: () => void;
+  isDarkMode: boolean;
 }
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
@@ -20,40 +25,57 @@ const AppContext = createContext<AppContextProps | undefined>(undefined);
 export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: light)");
+
   const [currentChatId, setCurrentChatId] = useState<string | undefined>(
     undefined
   );
-  const [primaryColor, setPrimaryColor] = useState<string | undefined>(
-    undefined
-  );
-  const [secondaryColor, setSecondaryColor] = useState<string | undefined>(
-    undefined
-  );
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+  const [isLightMode, setIsLightMode] = useState<boolean>(prefersDarkMode);
 
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: "light",
-          primary: {
-            main: primaryColor || "#020317",
-          },
-          secondary: {
-            main: secondaryColor || "#b5d62e",
-          },
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty(
+      "--background-image",
+      isLightMode
+        ? 'url("/public/svgs/lightModeBg.svg")'
+        : 'url("/public/svgs/darkModeBg.svg")'
+    );
+  }, [isLightMode]);
+
+  const theme = useMemo(() => {
+    return createTheme({
+      palette: {
+        mode: isLightMode ? "light" : "dark",
+        background: {
+          default: isLightMode ? "#f5f5f5f5" : "#222222",
+          paper: isLightMode ? "#ffffff" : "#222222",
         },
-      }),
-    [primaryColor, secondaryColor]
-  );
+        primary: {
+          main: isLightMode ? "#ffffff" : "#222222",
+          dark: isLightMode ? "#000" : "#fff",
+          light: isLightMode ? "#f5f5f5f5" : "#020317",
+        },
+        secondary: {
+          main: isLightMode ? "#b5d62e" : "#020317",
+        },
+      },
+    });
+  }, [isLightMode]);
 
-  const updateTheme = (newPrimaryColor: string, newSecondaryColor: string) => {
-    setPrimaryColor(newPrimaryColor);
-    setSecondaryColor(newSecondaryColor);
-  };
+  const toggleTheme = () => setIsLightMode(!isLightMode);
 
   return (
     <AppContext.Provider
-      value={{ setCurrentChatId, currentChatId, theme, updateTheme }}
+      value={{
+        setCurrentChatId,
+        currentChatId,
+        theme,
+        isDrawerOpen,
+        setIsDrawerOpen,
+        toggleTheme,
+        isDarkMode: !isLightMode,
+      }}
     >
       <ThemeProvider theme={theme}>
         <CssBaseline />

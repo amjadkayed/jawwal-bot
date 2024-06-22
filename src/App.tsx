@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import "overlayscrollbars/overlayscrollbars.css";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { AppProvider } from "./context/AppContext";
 
 function App() {
   const [initBodyOverlayScrollbars] = useOverlayScrollbars({
@@ -26,11 +27,13 @@ function App() {
 
   return (
     <BrowserRouter>
-      <DndProvider backend={HTML5Backend}>
-        <MainLayout>
-          <AppRoutes />
-        </MainLayout>
-      </DndProvider>
+      <AppProvider>
+        <DndProvider backend={HTML5Backend}>
+          <MainLayout>
+            <AppRoutes />
+          </MainLayout>
+        </DndProvider>
+      </AppProvider>
     </BrowserRouter>
   );
 }
